@@ -14,13 +14,14 @@ def loginaction(request):
                 em=value
             if key=="password":
                 pwd=value
-        
+          
         c="select * from users where email='{}' and password='{}'".format(em,pwd)
         cursor.execute(c)
+        # auth
         t=tuple(cursor.fetchall())
         if t==():
             return render(request,'error.html')
         else:
             return render(request,"welcome.html")
 
-    return render(request,'login_page.html')
+    return render(request,'login_page.html')  

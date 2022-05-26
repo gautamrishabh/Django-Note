@@ -1,16 +1,354 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Welcome Page</title>
-        <style>
-            body{
-                background-color: black;
-                color: blue;
-                font-size: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <center><h1> Welcome :) </h1></center>
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Sticky notes</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Reenie+Beanie&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="welcome.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+
+
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: arial, sans-serif;
+    font-size: 100%;
+    margin: 3em;
+    background: #333;
+    color: #fff;
+  }
+  
+  #heading {
+    position: sticky;
+    top: 0;
+    background-color: #333;
+    z-index: 7;
+    padding: 15px 0px;
+    margin-left: 15px;
+  }
+  
+  #no-notes {
+    padding: 100px 0px;
+    text-align: center;
+  }
+  
+  #ts {
+    color: #ffd31d;
+  }
+  
+  .inputText {
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #ffd31d;
+    width: 30%;
+    margin: 15px;
+    outline: none;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .btn {
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #ffd31d;
+    background-color: #ffd31d;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .btn:active {
+    border: 2px solid #333;
+    box-shadow: inset 0 0 5px #000000;
+  }
+  
+  h2,
+  p {
+    font-size: 100%;
+    font-weight: normal;
+  }
+  
+  ul,
+  li {
+    list-style: none;
+  }
+  
+  ul {
+    overflow: hidden;
+    padding: 3em 1em;
+  }
+  
+  ul li a {
+    text-decoration: none;
+    color: #000;
+    background: #ffd31d;
+    display: block;
+    height: 10em;
+    width: 10em;
+    padding: 1em;
+    box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
+  }
+  
+  ul li {
+    margin: 1em;
+    float: left;
+    position: relative;
+  }
+  
+  ul li h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
+  
+  ul li p {
+    font-family: "Reenie Beanie", cursive;
+    font-size: 1.1rem;
+  }
+  
+  .delete {
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border: 4px double white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  ul li a {
+    transform: rotate(-6deg);
+    -moz-transform: rotate(-6deg);
+    cursor: default;
+  }
+  
+  ul li:nth-child(even) a {
+    transform: rotate(4deg);
+    -moz-transform: rotate(4deg);
+    position: relative;
+    top: 5px;
+    background: #ff5733;
+  }
+  
+  ul li:nth-child(3n) a {
+    transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    position: relative;
+    top: -5px;
+    background: #77d8d8;
+  }
+  
+  ul li:nth-child(5n) a {
+    transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    position: relative;
+    top: -10px;
+  }
+  
+  ul li a:hover,
+  ul li a:focus {
+    box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.7);
+    transform: scale(1.25);
+    -moz-transform: scale(1.25);
+    position: relative;
+    z-index: 5;
+  }
+  
+  ol {
+    text-align: center;
+  }
+  
+  ol li {
+    display: inline;
+    padding-right: 1em;
+  }
+  
+  ol li a {
+    color: #fff;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    body {
+      margin-top: 1em;
+    }
+    #new-note-title-input,
+    #new-note-body-input {
+      display: block;
+      width: 90%;
+      margin-left: 0px;
+    }
+  
+    #heading {
+      margin-left: 0px;
+    }
+  
+    .btn {
+      margin-left: 0px;
+    }
+  }
+    </style>
+
+
+
+
+  </head>
+
+  <body>
+    <div id="heading">
+      <h1>Notes</h1>
+      <p id="ts">By Rishabh</p>
+    </div>
+    <div id="form">
+      <form id="inputForm">
+        <input
+        type="text"
+        class="inputText"
+        placeholder="Title"
+        id="new-note-title-input"
+        autocomplete="off"
+        required
+        autofocus
+      />
+        <input
+          class="inputText"
+          type="text"
+          placeholder="Note Content"
+          id="new-note-body-input"
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="btn">
+          Create Note
+        </button>
+      </form>
+    </div>
+
+    
+    <ul id="notes"></ul>
+    <h3 id="no-notes"></h3>
+
+
+    <script>
+      var itemList = document.getElementById("notes");
+
+itemList.addEventListener("click", removeItem);
+
+let count = Number(window.localStorage.getItem("count"));
+if (!count) {
+  window.localStorage.setItem("count", "0");
+}
+
+console.log(count);
+
+let createNote = (noteTitle, noteBody) => {
+  if (count > 0) {
+    document.getElementById("no-notes").className = "hidden";
+  }
+
+  var li = document.createElement("li");
+  var a = document.createElement("a");
+  var h2 = document.createElement("h2");
+  var p = document.createElement("p");
+  var ul = document.getElementById("notes");
+
+  let xButton = document.createElement("button");
+  xButton.classList.add("delete");
+  let xText = document.createTextNode("X");
+  let h2TN = document.createTextNode(noteTitle);
+  let pTN = document.createTextNode(noteBody);
+
+  h2.appendChild(h2TN);
+  p.appendChild(pTN);
+  xButton.appendChild(xText);
+
+  a.appendChild(h2);
+  a.appendChild(xButton);
+  a.appendChild(p);
+  a.setAttribute("href", "#");
+
+  li.appendChild(a);
+  ul.appendChild(li);
+};
+
+let createNoteFromInput = (e) => {
+  e.preventDefault();
+  var noteTitle = document.getElementById("new-note-title-input").value;
+  var noteBody = document.getElementById("new-note-body-input").value;
+
+  document.getElementById("new-note-title-input").value = "";
+  document.getElementById("new-note-body-input").value = "";
+
+  console.log("yes");
+  if (!noteTitle || !noteBody) {
+    alert("Both Title and body of the note must be provided");
+    return;
+  }
+  count += 1;
+  window.localStorage.setItem("count", count);
+
+  while (window.localStorage.getItem(noteTitle)) {
+    noteTitle = noteTitle + " - 1";
+  }
+  window.localStorage.setItem(noteTitle, noteBody);
+
+  createNote(noteTitle, noteBody);
+};
+
+function removeItem(e) {
+  //console.log('2');
+  if (e.target.classList.contains("delete")) {
+    console.log(e);
+    if (
+      confirm(
+        'Are you sure to delete the "' +
+          e.target.previousElementSibling.innerText +
+          '" note?'
+      )
+    ) {
+      //grab the parent
+      // console.log(e.target.previousSibling.data);
+      var li = e.target.parentElement.parentElement;
+
+      itemList.removeChild(li);
+      count -= 1;
+      window.localStorage.setItem("count", count);
+      window.localStorage.removeItem(e.target.previousElementSibling.innerText);
+      if (count < 1) {
+        document.getElementById("no-notes").className = "";
+      }
+    }
+  }
+}
+
+for (i = 0; i < count + 1; i++) {
+  console.log(window.localStorage.key(i));
+  let noteTitle = window.localStorage.key(i);
+  let noteBody = window.localStorage.getItem(noteTitle);
+  if (noteTitle !== "count" && noteTitle) {
+    createNote(noteTitle, noteBody);
+  }
+}
+
+document
+  .getElementById("inputForm")
+  .addEventListener("submit", createNoteFromInput, false)
+    </script>
+
+  </body>
 </html>
+

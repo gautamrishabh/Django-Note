@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -7,10 +6,9 @@
       href="https://fonts.googleapis.com/css?family=Reenie+Beanie&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="welcome.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
 
     <style>
         * {
@@ -200,20 +198,19 @@
   }
     </style>
 
+
+
   </head>
 
   <body>
     <div id="heading">
-      <h1>Notes</h1>
-      <p id="ts">By {{Email}}</p>
+      <h1>Feed Notes</h1>
+      <p id="ts"></p>
     </div>
     <div id="form">
-      <form action = '/welcome/' method="POST" id="inputForm">
-        {% csrf_token %}
-        <!-- {% load static %} -->
-        <input 
-          type='text'
-          name='head'
+      <form id="inputForm">
+        <input
+          type="text"
           class="inputText"
           placeholder="Title"
           id="new-note-title-input"
@@ -222,7 +219,6 @@
           autofocus
         />
         <input
-          name='body'
           class="inputText"
           type="text"
           placeholder="Note Content"
@@ -236,120 +232,8 @@
       </form>
     </div>
 
-    
+    <h3 id="no-notes">No Notes Found, Add one!</h3>
     <ul id="notes"></ul>
-    <h3 id="no-notes"></h3>
-
-
-    <script>
-      var itemList = document.getElementById("notes");
-
-itemList.addEventListener("click", removeItem);
-
-let count = Number(window.localStorage.getItem("count"));
-if (!count) {
-  window.localStorage.setItem("count", "0");
-}
-
-console.log(count);
-
-let createNote = (noteTitle, noteBody) => {
-  if (count > 0) {
-    document.getElementById("no-notes").className = "hidden";
-  }
-
-  var li = document.createElement("li");
-  var a = document.createElement("a");
-  var h2 = document.createElement("h2");
-  var p = document.createElement("p");
-  var ul = document.getElementById("notes");
-
-  let xButton = document.createElement("button");
-  xButton.classList.add("delete");
-  let xText = document.createTextNode("X");
-  let h2TN = document.createTextNode(noteTitle);
-  let pTN = document.createTextNode(noteBody);
-
-  h2.appendChild(h2TN);
-  p.appendChild(pTN);
-  xButton.appendChild(xText);
-
-  a.appendChild(h2);
-  a.appendChild(xButton);
-  a.appendChild(p);
-  a.setAttribute("href", "#");
-
-  li.appendChild(a);
-  ul.appendChild(li);
-};
-
-let createNoteFromInput = (e) => {
-  e.preventDefault();
-  var noteTitle = document.getElementById("new-note-title-input").value;
-  var noteBody = document.getElementById("new-note-body-input").value;
-
-  document.getElementById("new-note-title-input").value = "";
-  document.getElementById("new-note-body-input").value = "";
-
-  console.log("yes");
-  if (!noteTitle || !noteBody) {
-    alert("Both Title and body of the note must be provided");
-    return;
-  }
-  count += 1;
-  window.localStorage.setItem("count", count);
-
-  while (window.localStorage.getItem(noteTitle)) {
-    noteTitle = noteTitle + " - 1";
-  }
-  window.localStorage.setItem(noteTitle, noteBody);
-
-
-  createNote(noteTitle, noteBody);
-};
-
-function removeItem(e) {
-  //console.log('2');
-  if (e.target.classList.contains("delete")) {
-    console.log(e);
-    if (
-      confirm(
-        'Are you sure to delete the "' +
-          e.target.previousElementSibling.innerText +
-          '" note?'
-      )
-    ) {
-      //grab the parent
-      // console.log(e.target.previousSibling.data);
-      var li = e.target.parentElement.parentElement;
-
-      itemList.removeChild(li);
-      count -= 1;
-      window.localStorage.setItem("count", count);
-      window.localStorage.removeItem(e.target.previousElementSibling.innerText);
-      if (count < 1) {
-        document.getElementById("no-notes").className = "";
-      }
-    }
-  }
-}
-
-for (i = 0; i < count + 1; i++) {
-  console.log(window.localStorage.key(i));
-  let noteTitle = window.localStorage.key(i);
-  let noteBody = window.localStorage.getItem(noteTitle);
-  if (noteTitle !== "count" && noteTitle) {
-    createNote(noteTitle, noteBody);
-  }
-}
-
-document
-  .getElementById("inputForm")
-  .addEventListener("submit", createNoteFromInput, false)
-    </script>
-
+    <script src="myscripts.js"></script>
   </body>
 </html>
-
-<!-- http://127.0.0.1:8000/signup/ -->
-<!-- http://127.0.0.1:8000/login/ -->

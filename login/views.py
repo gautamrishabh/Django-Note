@@ -54,8 +54,6 @@ def loginaction(request):
             print(tt)
             m.commit()
 
-            messages.info(request, em)
-
             return redirect("/welcome")
             # return render(request,'welcome.html')  
             # return render(request,'feed.html')
@@ -66,6 +64,7 @@ def loginaction(request):
 # Create your views here.
 def addNotes(request):
     global head,body,email
+    print('oooh')
     if request.method=="POST":
         m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
         cursor=m.cursor()
@@ -108,11 +107,34 @@ import logging
 # logger.warning()
 
 def wel(request):
-    print('post -->',request.POST)
-    noteHeading = request.POST.get("head")
-    noteContent = request.POST.get("body")
-    print('heading:',noteHeading,'content:',noteContent)
+    heading,content,email = '','',''
+    m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
+    cursor=m.cursor()
+    d=request.POST
+    cursor.execute("select count(*) from notes")
+    row = cursor.fetchone()
+    rowCount = row[0]
+    print('row:',row,'rowCount:',rowCount)
+    for key,value in d.items():
+        if key=="head":
+            heading=value
+        if key=="body":
+            content=value
+        if key=="userEmail":
+            email=value
+        print(key,':',value)
+        if(heading != '' and content != '' and email != ''):
+            c="insert into notes Values('{}','{}','{}','{}')".format(rowCount+1,email,heading,content)
+            cursor.execute(c)
+            m.commit()
+
+    # print('post -->',request.POST)
+    # noteHeading = request.POST.get("head")
+    # noteContent = request.POST.get("body")
+    # userEmail = request.POST.get("userEmail")
+    # print('heading:',noteHeading,'content:',noteContent,'userEmail:',userEmail)
     context ={}
+    messages.info(request, em)
     print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     return render(request, "welcome.html", context)
     # def wel(request):

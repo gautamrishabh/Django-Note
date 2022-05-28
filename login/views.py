@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import mysql.connector as sql
 from django.shortcuts import redirect
+from django.contrib import messages
 from datetime import date
 import datetime
 
@@ -24,7 +25,7 @@ def loginaction(request):
             if key=="password":
                 pwd=value
 
-        # request.Email==em      
+        # request.Email==em
           
         c="select * from users where Email='{}' and password='{}'".format(em,pwd)
         cursor.execute(c)
@@ -52,9 +53,13 @@ def loginaction(request):
             tt=tuple(cursor.fetchall())
             print(tt)
             m.commit()
+
+            messages.info(request, em)
+
             return redirect("/welcome")
+            # return render(request,'welcome.html')  
             # return render(request,'feed.html')
-    return render(request,'login_page.html')  
+    return render(request,'login_page.html')
 ###################################################################################
 # NOTEACTION
 
@@ -104,8 +109,9 @@ import logging
 
 def wel(request):
     print('post -->',request.POST)
-    head = request.POST.get("head")
-    print('head -->',head)
+    noteHeading = request.POST.get("head")
+    noteContent = request.POST.get("body")
+    print('heading:',noteHeading,'content:',noteContent)
     context ={}
     print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     return render(request, "welcome.html", context)

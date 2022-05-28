@@ -205,10 +205,14 @@
   <body>
     <div id="heading">
       <h1>Notes</h1>
-      <p id="ts">By {{Email}}</p>
+      {% if messages %}
+        {% for message in messages %}
+        <p id="ts">By {{ message }}</p>
+        {% endfor %}
+      {% endif %}
     </div>
     <div id="form">
-      <form action = '/welcome/' method="POST" id="inputForm">
+      <form action = '/welcome/' method="POST">
         {% csrf_token %}
         <!-- {% load static %} -->
         <input 

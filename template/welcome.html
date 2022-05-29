@@ -242,10 +242,18 @@
         </button>
       </form>
     </div>
-    {% for note in notes %}
-          <p >{{ note }}</p>
-        {% endfor %}
+    <!-- {% for note in notes %}
+      <p >{{ note }}</p>
+    {% endfor %} -->
      
+    <ul id="notes">
+      {% for note in notes %}
+        <li>
+          <a href="#"><h2>{{ note.1 }}</h2><button class="delete">X</button><p>{{ note.2 }}</p></a>
+        </li>
+      {% endfor %}
+    </ul>
+
     <!-- <h1>{{notes}}</h1> -->
     <!-- <ul>
       {% for note in context.notes %}
@@ -256,7 +264,6 @@
     
     <ul id="notes"></ul>
     <h3 id="no-notes"></h3>
-
 
   <script>
     var itemList = document.getElementById("notes");

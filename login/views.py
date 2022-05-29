@@ -52,7 +52,6 @@ def loginaction(request):
             tt=tuple(cursor.fetchall())
             print(tt)
             m.commit()
-
             return redirect("/welcome")
             # return render(request,'welcome.html')  
             # return render(request,'feed.html')
@@ -135,16 +134,14 @@ def wel(request):
         m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
         cursor=m.cursor()
         d=request.GET
-            
-        c="select Sno, Title, Content from notes"
-            
+        c="select Sno, Title, Content from notes where Email = '{}'".format(em)
+
         cursor.execute(c)
-        
         notes = cursor.fetchall()
         print(notes)
 
         context = {"notes": notes}
-        print('^^^^^^^^^^^^^^^^^^^^^^^')
+        print('^^^^^^^^^^^^^^^^^^^^^^^',notes)
         messages.info(request, em,notes)
 
         m.commit()

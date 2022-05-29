@@ -5,7 +5,6 @@ from django.contrib import messages
 from datetime import date
 import datetime
 
-
 em=''
 pwd=''
 head=''
@@ -108,35 +107,48 @@ import logging
 
 def wel(request):
     heading,content,email = '','',''
-    m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
-    cursor=m.cursor()
-    d=request.POST
-    cursor.execute("select count(*) from notes")
-    row = cursor.fetchone()
-    rowCount = row[0]
-    print('row:',row,'rowCount:',rowCount)
-    for key,value in d.items():
-        if key=="head":
-            heading=value
-        if key=="body":
-            content=value
-        if key=="userEmail":
-            email=value
-        print(key,':',value)
-        if(heading != '' and content != '' and email != ''):
-            c="insert into notes Values('{}','{}','{}','{}')".format(rowCount+1,email,heading,content)
-            cursor.execute(c)
-            m.commit()
+    notes = ''
+    if request.method=="POST":
+        m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
+        cursor=m.cursor()
+        d=request.POST
+        cursor.execute("select count(*) from notes")
+        row = cursor.fetchone()
+        rowCount = row[0]
+        print('row:',row,'rowCount:',rowCount)
+        for key,value in d.items():
+            if key=="head":
+                heading=value
+            if key=="body":
+                content=value
+            if key=="userEmail":
+                email=value
+            # print(key,':',value)
+            if(heading != '' and content != '' and email != ''):
+                c="insert into notes Values('{}','{}','{}','{}')".format(rowCount+1,email,heading,content)
+                cursor.execute(c)
+                m.commit()
+        context ={"body": "head"}
+        messages.info(request, em)
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    else:
+        m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
+        cursor=m.cursor()
+        d=request.GET
+            
+        c="select Sno, Title, Content from notes"
+            
+        cursor.execute(c)
+        
+        notes = cursor.fetchall()
+        print(notes)
 
-    # print('post -->',request.POST)
-    # noteHeading = request.POST.get("head")
-    # noteContent = request.POST.get("body")
-    # userEmail = request.POST.get("userEmail")
-    # print('heading:',noteHeading,'content:',noteContent,'userEmail:',userEmail)
-    context ={}
-    messages.info(request, em)
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    return render(request, "welcome.html", context)
+        context = {"notes": notes}
+        print('^^^^^^^^^^^^^^^^^^^^^^^')
+        messages.info(request, em,notes)
+
+        m.commit()
+    return render(request,"welcome.html",context)
     # def wel(request):
 #     logging.warning('hefwfwaefafeaw')
 #     logging.warning(em)
@@ -196,4 +208,21 @@ def signaction(request):
 
     return render(request,'signup_page.html')
 
-
+#####################################################################
+# FETCH NOTES
+notes=''
+def fetch(request):
+    global notes
+    if request.method=="GET":
+        m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
+        cursor=m.cursor()
+        d=request.GET
+        
+        c="select * from notes "
+        
+        cursor.execute(c)
+        m.commit()
+        notes = cursor.fetchall()
+        print(notes)
+        print('^^^^^^^^^^^^^^^^^^^^^^^')
+    return render(request,'welcome.html')

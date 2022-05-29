@@ -212,6 +212,8 @@
       {% endif %}
     </div>
     <div id="form">
+      <!-- <form action = '/welcome/' method="GET"></form>
+        {% csrf_token %} -->
       <form action = '/welcome/' method="POST">
         {% csrf_token %}
         <!-- {% load static %} -->
@@ -240,6 +242,16 @@
         </button>
       </form>
     </div>
+    {% for note in notes %}
+          <p >{{ note }}</p>
+        {% endfor %}
+     
+    <!-- <h1>{{notes}}</h1> -->
+    <!-- <ul>
+      {% for note in context.notes %}
+        <li>{{ note.Title}}</li>
+      {% endfor %}
+    </ul> -->
 
     
     <ul id="notes"></ul>

@@ -249,7 +249,15 @@
     <ul id="notes">
       {% for note in notes %}
         <li>
+          <!-- <form action = "#" method="POST">
+            <h2>{{ note.1 }}</h2><button class="delete">X</button><p>{{ note.2 }}</p>
+          </form> -->
           <a href="#"><h2>{{ note.1 }}</h2><button class="delete">X</button><p>{{ note.2 }}</p></a>
+        </li>
+      {% endfor %}
+      {% for otherNote in otherNotes %}
+        <li>
+          <a href="#"><h2>{{ otherNote.1 }}</h2><p>{{ otherNote.2 }}</p></a>
         </li>
       {% endfor %}
     </ul>

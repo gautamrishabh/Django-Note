@@ -19,6 +19,7 @@ from login.views import signaction
 from login.views import loginaction
 from login.views import addNotes
 from login.views import wel
+# from login.views import delete
 
 
 

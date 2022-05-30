@@ -105,8 +105,10 @@ import logging
 # logger.warning()
 
 def wel(request):
+    print('=============')
     heading,content,email = '','',''
     notes = ''
+    otherNotes = ''
     if request.method=="POST":
         m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
         cursor=m.cursor()
@@ -131,18 +133,27 @@ def wel(request):
         messages.info(request, em)
         print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     else:
+        print('else...')
         m=sql.connect(host="localhost",user="root",passwd="rishabh1",database='website')
         cursor=m.cursor()
-        d=request.GET
-        c="select Sno, Title, Content from notes where Email = '{}'".format(em)
-
+        # d=request.GET
+        c="select Sno, Title, Content, Email from notes where Email = '{}'".format(em)
+        c1= "select Sno, Title, Content, Email from notes where Email != '{}'".format(em)
         cursor.execute(c)
         notes = cursor.fetchall()
-        print(notes)
+        cursor=m.cursor()
+        cursor.execute(c1)
+        print('c:',c,'c1:',c1)
+        otherNotes = cursor.fetchall()
+        print(otherNotes)
+        
+        # context = {"notes": otherNotes}
+        # print('^^^^^^^^^^^^^^^^^^^^^^^',otherNotes)
+        # messages.info(request, em,otherNotes)
 
-        context = {"notes": notes}
-        print('^^^^^^^^^^^^^^^^^^^^^^^',notes)
-        messages.info(request, em,notes)
+        context = {"notes": notes, "otherNotes": otherNotes}
+        print('^^^^^^^^^^^^^^^^^^^^^^^',otherNotes)
+        messages.info(request, em, context)
 
         m.commit()
     return render(request,"welcome.html",context)
@@ -223,3 +234,7 @@ def fetch(request):
         print(notes)
         print('^^^^^^^^^^^^^^^^^^^^^^^')
     return render(request,'welcome.html')
+
+
+# def delete(request):
+#     print('delete func executed')
